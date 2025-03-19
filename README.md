@@ -28,7 +28,13 @@ depth = 1
 
 3. В вашем `meson.build` добавьте:
 ```meson
-cpp_code_generator_dep = dependency('cpp-code-generator', fallback : ['cpp-code-generator', 'lib'])
+cpp_code_generator_proj = subproject('cpp-code-generator')
+cpp_code_generator_lib = cpp_code_generator_proj.get_variable('lib')
+
+executable('your-project', 
+  sources,
+  link_with: cpp_code_generator_lib,
+  include_directories: cpp_code_generator_proj.get_variable('includes'))
 ```
 
 4. При сборке вашего проекта используйте:
@@ -55,7 +61,7 @@ ninja -C build install
 ## Использование
 
 ```cpp
-#include <cpp-code-generator/CodeStructure.hpp>
+#include <CodeStructure.hpp>
 
 int main() {
     cppgen::CodeStructure codeGen;
