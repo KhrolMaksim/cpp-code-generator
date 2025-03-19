@@ -69,6 +69,7 @@ int main() {
     // Создаем класс
     cppgen::CodeStructure::Class exampleClass;
     exampleClass.name = "Example";
+    exampleClass.includes.push_back("<iostream>");
     exampleClass.includes.push_back("<string>");
 
     // Добавляем метод
