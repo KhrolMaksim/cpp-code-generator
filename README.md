@@ -70,7 +70,7 @@ int main() {
     method.returnType = "void";
     method.name = "doSomething";
     method.parameters = "const std::string& input";
-    method.body = "  std::cout << \"Processing: \" << input << std::endl;";
+    method.body = "std::cout << \"Processing: \" << input << std::endl;";
     method.access = cppgen::CodeStructure::AccessModifier::Public;
     exampleClass.methods.push_back(method);
 

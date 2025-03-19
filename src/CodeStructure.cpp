@@ -35,12 +35,12 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     // Начинаем объявление класса
     headerFile << "class " << cls.name;
     if (not cls.baseClasses.empty()) {
-      headerFile << " : public " << cls.baseClasses[0];
+      headerFile << ": public " << cls.baseClasses[0];
       for (size_t i = 1; i < cls.baseClasses.size(); ++i) {
         headerFile << ", public " << cls.baseClasses[i];
       }
     }
-    headerFile << " {\n";
+    headerFile << "{\n";
 
     // Группируем методы и поля по модификаторам доступа
     std::map<AccessModifier, std::vector<const Method *>> methodsByAccess;
@@ -75,18 +75,18 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
       if (method.isVirtual) {
         headerFile << "virtual ";
       }
-      headerFile << method.returnType << " " << method.name << "(" << method.parameters << ")";
+      headerFile << method.returnType << "" << method.name << "(" << method.parameters << ")";
       if (method.isPureVirtual) {
-        headerFile << " = 0";
+        headerFile << "= 0";
       }
       headerFile << ";\n";
     };
 
     // Функция для записи поля
     auto writeField = [&headerFile](const Field &field) {
-      headerFile << field.type << " " << field.name;
+      headerFile << field.type << "" << field.name;
       if (not field.defaultValue.empty()) {
-        headerFile << " = " << field.defaultValue;
+        headerFile << "= " << field.defaultValue;
       }
       headerFile << ";\n";
     };
@@ -96,12 +96,12 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
                              &writeField](const Class &nestedClass) {
       headerFile << "class " << nestedClass.name;
       if (not nestedClass.baseClasses.empty()) {
-        headerFile << " : public " << nestedClass.baseClasses[0];
+        headerFile << ": public " << nestedClass.baseClasses[0];
         for (size_t i = 1; i < nestedClass.baseClasses.size(); ++i) {
           headerFile << ", public " << nestedClass.baseClasses[i];
         }
       }
-      headerFile << " {\n";
+      headerFile << "{\n";
 
       // Группируем методы и поля вложенного класса
       std::map<AccessModifier, std::vector<const Method *>> nestedMethodsByAccess;
@@ -158,7 +158,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     // Записываем реализации методов
     for (const auto &method : cls.methods) {
       if (not method.isPureVirtual) {
-        sourceFile << method.returnType << " " << cls.name << "::" << method.name << "("
+        sourceFile << method.returnType << "" << cls.name << "::" << method.name << "("
                    << method.parameters << ") {\n"
                    << method.body << "\n}\n\n";
       }
@@ -168,7 +168,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     for (const auto &nestedClass : cls.nestedClasses) {
       for (const auto &method : nestedClass.methods) {
         if (not method.isPureVirtual) {
-          sourceFile << method.returnType << " " << cls.name << "::" << nestedClass.name
+          sourceFile << method.returnType << "" << cls.name << "::" << nestedClass.name
                      << "::" << method.name << "(" << method.parameters << ") {\n"
                      << method.body << "\n}\n\n";
         }
@@ -184,7 +184,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     std::string headerFile = outputDir + "/" + cls.name + ".h";
     std::string sourceFile = outputDir + "/" + cls.name + ".cpp";
 
-    std::string formatCmd = "clang-format -i " + headerFile + " " + sourceFile;
+    std::string formatCmd = "clang-format -i " + headerFile + "" + sourceFile;
     if (std::system(formatCmd.c_str()) != 0) {
       std::cerr << "Ошибка при форматировании файлов для класса: " << cls.name << std::endl;
     }
