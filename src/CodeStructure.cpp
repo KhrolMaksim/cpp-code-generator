@@ -75,7 +75,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
       if (method.isVirtual) {
         headerFile << "virtual ";
       }
-      headerFile << method.returnType << "" << method.name << "(" << method.parameters << ")";
+      headerFile << method.returnType << " " << method.name << "(" << method.parameters << ")";
       if (method.isPureVirtual) {
         headerFile << "= 0";
       }
@@ -84,7 +84,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
 
     // Функция для записи поля
     auto writeField = [&headerFile](const Field &field) {
-      headerFile << field.type << "" << field.name;
+      headerFile << field.type << " " << field.name;
       if (not field.defaultValue.empty()) {
         headerFile << "= " << field.defaultValue;
       }
@@ -158,7 +158,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     // Записываем реализации методов
     for (const auto &method : cls.methods) {
       if (not method.isPureVirtual) {
-        sourceFile << method.returnType << "" << cls.name << "::" << method.name << "("
+        sourceFile << method.returnType << " " << cls.name << "::" << method.name << "("
                    << method.parameters << ") {\n"
                    << method.body << "\n}\n\n";
       }
@@ -168,7 +168,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     for (const auto &nestedClass : cls.nestedClasses) {
       for (const auto &method : nestedClass.methods) {
         if (not method.isPureVirtual) {
-          sourceFile << method.returnType << "" << cls.name << "::" << nestedClass.name
+          sourceFile << method.returnType << " " << cls.name << "::" << nestedClass.name
                      << "::" << method.name << "(" << method.parameters << ") {\n"
                      << method.body << "\n}\n\n";
         }
@@ -184,7 +184,7 @@ void CodeStructure::writeToFiles(const std::string &outputDir) const {
     std::string headerFile = outputDir + "/" + cls.name + ".h";
     std::string sourceFile = outputDir + "/" + cls.name + ".cpp";
 
-    std::string formatCmd = "clang-format -i " + headerFile + "" + sourceFile;
+    std::string formatCmd = "clang-format -i " + headerFile + " " + sourceFile;
     if (std::system(formatCmd.c_str()) != 0) {
       std::cerr << "Ошибка при форматировании файлов для класса: " << cls.name << std::endl;
     }
